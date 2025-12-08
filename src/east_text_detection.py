@@ -22,13 +22,13 @@ functions in other scripts to perform text detection.
 if __name__ == "__main__": raise RuntimeError("Do not run this script directly.")
 
 import os
-import numpy
+import numpy as np
 import cv2
 from typing import Final
 
 # ********************** beg Functions ********************** #
 
-def _decode(scores: numpy.ndarray, geometry: numpy.ndarray, thresh: float = 0.5) -> Tuple[list[Tuple[float, float, float, float]], list[float]]:
+def _decode(scores: np.ndarray, geometry: np.ndarray, thresh: float = 0.5) -> tuple[list[tuple[float, float, float, float]], list[float]]:
   """
   Decode EAST text detector predictions.
 
@@ -83,7 +83,7 @@ def _decode(scores: numpy.ndarray, geometry: numpy.ndarray, thresh: float = 0.5)
   return rects, confidences
 
 
-def detectTextBBFromImage(path: str, size_type: int = 0, show_img: bool = False, box_color: Tuple[int, int, int] = (0, 255, 0), box_thickness: int = 2) -> list[Tuple[int, int, int, int]]:
+def detectTextBBFromImage(path: str, size_type: int = 0, show_img: bool = False, box_color: tuple[int, int, int] = (0, 255, 0), box_thickness: int = 2) -> list[tuple[int, int, int, int]]:
   """
   Gets the bounding box locations for likely 
   text-regions in an image using the EAST model.
@@ -187,7 +187,7 @@ def detectTextBBFromImage(path: str, size_type: int = 0, show_img: bool = False,
   return scaled_boxes
 
 
-def detectTextBBFromImages(paths: list[str], size_type: int = 0, show_img: bool = False, box_color: Tuple[int, int, int] = (0, 255, 0), box_thickness: int = 2) -> list[list[Tuple[int, int, int, int]]]:
+def detectTextBBFromImages(paths: list[str], size_type: int = 0, show_img: bool = False, box_color: tuple[int, int, int] = (0, 255, 0), box_thickness: int = 2) -> list[list[tuple[int, int, int, int]]]:
   """
   Gets the bounding box locations for likely 
   text-regions in an image using the EAST model.

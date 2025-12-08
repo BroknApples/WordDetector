@@ -2,3 +2,4 @@ numpy
 opencv-python
 torch
 trdg
+Pillow==9.5.0
