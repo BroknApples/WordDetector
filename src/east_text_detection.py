@@ -19,12 +19,16 @@ This module is not meant to be run directly. Import and use its
 functions in other scripts to perform text detection.
 """
 
-if __name__ == "__main__": raise RuntimeError("Do not run this script directly.")
+
+if __name__ == "__main__":
+  raise RuntimeError("Do not run this script directly.")
+
 
 import os
 import numpy as np
 import cv2
 from typing import Final
+
 
 # ********************** beg Functions ********************** #
 
@@ -118,7 +122,7 @@ def detectTextBBFromImage(path: str, size_type: int = 0, show_img: bool = False,
   EAST_MODEL: Final = "models/frozen_east_text_detection.pb"
 
   # Output layer names from EAST
-  LAYERS: Final = ["feature_fusion/concat_3","feature_fusion/Conv_7/Sigmoid"]
+  LAYERS: Final = ["feature_fusion/Conv_7/Sigmoid", "feature_fusion/concat_3"]
 
   # Mean values used in blobbing for the EAST model
   EAST_MEANS: Final = (123.68, 116.78, 103.94)
