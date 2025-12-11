@@ -29,7 +29,7 @@ FONT_SCALE: Final = 0.7
 FONT_COLOR: Final = (255, 0, 0)
 FONT_THICKNESS: Final = 2
 CUSTOM_CRNN_MODEL_PATH: Final = "models/crnn_predictor.keras"
-IMAGE_EXTENSIONS: Final = ['.jpg', '.jpeg', '.png', '.bmp', '.tiff'] # Common image extensions
+IMAGE_EXTENSIONS: Final = ['.jpg', '.jpeg', '.png', '.bmp', '.tiff', '.webp'] # Common image extensions
 
 def _sortBoxesReadingOrder(boxes, y_thresh: int = 12):
   """
@@ -188,6 +188,7 @@ def main(argc: int, argv: list[str]) -> int:
         cv2.putText(copy, word, (x1, y1 - 10), FONT, FONT_SCALE, FONT_COLOR, FONT_THICKNESS)
 
     # Print and draw
+    copy = cv2.cvtColor(copy, cv2.COLOR_BGR2RGB)
     if display:
       cv2.imshow("Result", copy)
       cv2.waitKey(0)
