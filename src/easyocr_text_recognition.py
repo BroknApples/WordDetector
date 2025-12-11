@@ -9,7 +9,6 @@ if __name__ == "__main__":
 
 import sys
 import os
-import cv2
 import numpy as np
 import easyocr
 from typing import Final
@@ -17,7 +16,6 @@ from typing import Final
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 sys.path.insert(0, ROOT)
 
-from src.east_text_detection import detectTextBBFromImage
 
 # CONFIG
 RESIZE: Final = 1

@@ -32,7 +32,7 @@ from typing import Final
 # ---------------- Constants ---------------
 
 # Load network
-EAST_MODEL: Final = "models/frozen_east_text_detection.pb"
+EAST_MODEL: Final = "frozen_east_text_detection.pb"
 EAST = cv2.dnn.readNet(EAST_MODEL)
 
 # Output layer names from EAST

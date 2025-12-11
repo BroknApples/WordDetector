@@ -8,6 +8,7 @@ import cv2
 import numpy as np
 import tensorflow as tf
 from pathlib import Path
+import matplotlib.pyplot as plt
 
 # Add project root to sys.path so "src" can be imported
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
@@ -66,6 +67,7 @@ def _sortBoxesReadingOrder(boxes, y_thresh: int = 12):
   res = [item for sublist in lines for item in sublist]
   return res
 
+
 # ---------- Main ----------
 def main(argc: int, argv: list[str]) -> int:
   """
@@ -110,20 +112,15 @@ def main(argc: int, argv: list[str]) -> int:
     return -1
 
   if model_type != CRNN_MODEL_TYPE and model_type != EASYOCR_MODEL_TYPE:
-    prtin(f"Invalid model_type [{model_type}]")
+    print(f"Invalid model_type [{model_type}]")
     return -1
-
-  # Load prediction model (CRNN without Lambda)
-  model = None
-  if model_type == CRNN_MODEL_TYPE:
-    model = load_model(CUSTOM_CRNN_MODEL_PATH, compile=False)
 
   # Ensure output dir exists
   OUTPUT_DIR = Path("out")
   OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
   # Determine list of image files to process
-  image_paths: List[str] = []
+  image_paths: list[str] = []
   
   if os.path.isdir(images_path):
     print(f"Processing directory: {images_path}")
@@ -135,12 +132,14 @@ def main(argc: int, argv: list[str]) -> int:
     if not image_paths:
       print(f"No supported image files found in {images_path}")
       return -1
-
   elif os.path.isfile(images_path):
     # Single file case
     image_paths.append(images_path)
 
-  # Load image
+  
+  if model_type == CRNN_MODEL_TYPE:
+    model = load_model(CUSTOM_CRNN_MODEL_PATH)
+
   def runPipeline(img_path):
     """
     Run the full pipeline on an image
@@ -164,9 +163,9 @@ def main(argc: int, argv: list[str]) -> int:
     if model_type == CRNN_MODEL_TYPE:
       results = recognizeTextFromBBs_CustomCRNN(image, boxes, model)
       for tup in results:
-        print(f"{(x1, y1, x2, y2)} : {word}")
         (x1, y1, x2, y2), word_list = tup
         word_string = word_list[0]
+        print(f"{(x1, y1, x2, y2)} : {word}")
         
         # Draw Bounding Box
         cv2.rectangle(copy, (x1, y1), (x2, y2), (0, 255, 0), 2)
@@ -186,7 +185,7 @@ def main(argc: int, argv: list[str]) -> int:
 
         cv2.rectangle(copy, (x1, y1), (x2, y2), (0, 255, 0), 2)
         cv2.putText(copy, word, (x1, y1 - 10), FONT, FONT_SCALE, FONT_COLOR, FONT_THICKNESS)
-
+    
     # Print and draw
     copy = cv2.cvtColor(copy, cv2.COLOR_BGR2RGB)
     if display:
@@ -196,7 +195,7 @@ def main(argc: int, argv: list[str]) -> int:
     
     base_name = os.path.basename(img_path)
     name, ext = os.path.splitext(base_name)
-    save_path = OUTPUT_DIR / f"{name}_result.png"
+    save_path = OUTPUT_DIR / f"{name}_{append}.png"
     cv2.imwrite(str(save_path), copy)
 
   # Run pipeline for each image
